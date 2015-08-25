@@ -2,6 +2,8 @@
 
 [Gulp](http://gulpjs.com/) plugin to check your dependencies (through npm outdated)
 
+![gulp-check-deps](demo.gif)
+
 ## Why ?
 
 NPM and its `outdated` command are good tools to gather informations about the state of a project's dependencies. The problem with
