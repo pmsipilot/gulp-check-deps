@@ -141,14 +141,18 @@ var levels = {
                         head: ['Dependency', 'Type', 'Current', 'Notices']
                     });
 
-                    Object.keys(notices).forEach(function (depName) {
-                        table.push([
-                            depName,
-                            json[depName].type === 'dependencies' ? 'Dependency' : 'Dev. dependency',
-                            json[depName].current || 'N/A',
-                            notices[depName].join('\n') || 'N/A'
-                        ]);
-                    });
+                    Object.keys(notices)
+                        .filter(function(depName) {
+                            return !!notices[depName].length;
+                        })
+                        .forEach(function(depName) {
+                            table.push([
+                                depName,
+                                json[depName].type === 'dependencies' ? 'Dependency' : 'Dev. dependency',
+                                json[depName].current || 'N/A',
+                                notices[depName].join('\n')
+                            ]);
+                        });
 
                     table.toString().split('\n').forEach(function (row) {
                         util.log(row);
