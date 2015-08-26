@@ -1,3 +1,18 @@
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/pmsipilot/https://github.com/pmsipilot/gulp-check-deps/compare/v1.0.1...v1.1.0) (2015-08-26)
+
+
+### Bug Fixes
+
+* Do not display dependencies without notices ([c283703](https://github.com/pmsipilot/https://github.com/pmsipilot/gulp-check-deps/commit/c283703))
+
+### Features
+
+* Display dependencies' constraints ([fcb4bbc](https://github.com/pmsipilot/https://github.com/pmsipilot/gulp-check-deps/commit/fcb4bbc))
+* Sort dependencies alphabetically ([ffc6f9c](https://github.com/pmsipilot/https://github.com/pmsipilot/gulp-check-deps/commit/ffc6f9c))
+
+
+
 <a name="1.0.1"></a>
 ## [1.0.1](https://github.com/pmsipilot/https://github.com/pmsipilot/gulp-check-deps/compare/v1.0.0...v1.0.1) (2015-08-26)
 
