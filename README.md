@@ -1,4 +1,4 @@
-# gulp-check-deps
+# gulp-check-deps [![Build Status](https://travis-ci.org/pmsipilot/gulp-check-deps.svg?branch=master)](https://travis-ci.org/pmsipilot/gulp-check-deps)
 
 [Gulp](http://gulpjs.com/) plugin to check your dependencies (through npm outdated)
 

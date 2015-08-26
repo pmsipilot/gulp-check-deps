@@ -3,9 +3,15 @@ sudo: false
 language: node_js
 
 node_js:
-  - "iojs"
-  - "0.12"
-  - "0.10"
+  - iojs
+  - 0.12
+  - 0.11
+  - 0.10
+
+matrix:
+  allow_failures:
+    - node_js: 0.11
+    - node_js: 0.10
 
 git:
   depth: 10
