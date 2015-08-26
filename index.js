@@ -28,6 +28,7 @@ var levels = {
 
         var stream = through.obj(function(file, enc, cb) {
             var npmWorkingDirectory = path.dirname(file.path),
+                packageJson = JSON.parse(file.contents.toString());
                 outdated = spawn(config.npmPath, ['outdated', '--json', '--long'].concat(config.npmArgs), { cwd: npmWorkingDirectory }),
                 outdatedData = '';
 
@@ -138,7 +139,7 @@ var levels = {
                             'mid-mid': '',
                             'right-mid': ''
                         },
-                        head: ['Dependency', 'Type', 'Current', 'Notices']
+                        head: ['Dependency', 'Type', 'Constraint', 'Current', 'Notices']
                     });
 
                     Object.keys(notices)
@@ -146,9 +147,21 @@ var levels = {
                             return !!notices[depName].length;
                         })
                         .forEach(function(depName) {
+                            var constraint = packageJson[json[depName].type][depName],
+                                matches;
+
+                            if ((matches = constraint.match(/#(.*)$/)) !== null) {
+                                constraint = matches[1];
+
+                                if (constraint.match(/[0-9a-f]{40}/) !== null) {
+                                    constraint = constraint.substr(0, 9);
+                                }
+                            }
+
                             table.push([
                                 depName,
                                 json[depName].type === 'dependencies' ? 'Dependency' : 'Dev. dependency',
+                                constraint,
                                 json[depName].current || 'N/A',
                                 notices[depName].join('\n')
                             ]);
