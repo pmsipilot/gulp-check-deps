@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
     path = require('path'),
+    through2 = require('through2'),
     fs = require('fs'),
     jshint = require('gulp-jshint'),
     changelog = require('conventional-changelog'),
@@ -26,14 +27,24 @@ gulp.task('check:deps', function() {
         .pipe(checkDeps(checkDepsConfig));
 });
 
-gulp.task('release:changelog', function() {
-    return changelog(
+gulp.task('release:changelog', function(done) {
+    changelog(
         { preset: 'angular' },
         {
             repository: 'https://github.com/pmsipilot/gulp-check-deps',
             version: require(path.join(directories.main, 'package.json')).version
         }
-    ).pipe(fs.createWriteStream(path.join(directories.main, 'CHANGELOG.md')));
+    ).pipe(through2(function(buffer) {
+        var file = path.join(directories.main, 'CHANGELOG.md'),
+            data = fs.readFileSync(file);
+            fd = fs.openSync(file, 'w+');
+
+        fs.writeSync(fd, buffer, 0, buffer.length);
+        fs.writeSync(fd, data, 0, data.length);
+        fs.close(fd);
+
+        done();
+    }));
 });
 
 gulp.task('default', ['check:cs', 'check:deps']);
