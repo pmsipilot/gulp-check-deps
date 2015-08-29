@@ -20,7 +20,8 @@ gulp.task('check:cs', function() {
 
 gulp.task('check:deps', function() {
     var checkDepsConfig = {
-        failForGitDependencies: true
+        failForGitDependencies: true,
+        ignore: 'conventional-changelog'
     };
 
     return gulp.src(path.join(directories.main, 'package.json'))
@@ -28,23 +29,16 @@ gulp.task('check:deps', function() {
 });
 
 gulp.task('release:changelog', function(done) {
-    changelog(
-        { preset: 'angular' },
-        {
-            repository: 'https://github.com/pmsipilot/gulp-check-deps',
-            version: require(path.join(directories.main, 'package.json')).version
+    changelog({
+        repository: 'https://github.com/pmsipilot/gulp-check-deps',
+        version: require(__dirname + '/package.json').version
+    }, function(err, log) {
+        if (!err) {
+            fs.writeFileSync(__dirname + '/CHANGELOG.md', log);
         }
-    ).pipe(through2(function(buffer) {
-        var file = path.join(directories.main, 'CHANGELOG.md'),
-            data = fs.readFileSync(file);
-            fd = fs.openSync(file, 'w+');
 
-        fs.writeSync(fd, buffer, 0, buffer.length);
-        fs.writeSync(fd, data, 0, data.length);
-        fs.close(fd);
-
-        done();
-    }));
+        done(err);
+    });
 });
 
 gulp.task('default', ['check:cs', 'check:deps']);
