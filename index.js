@@ -21,14 +21,15 @@ var levels = {
         npmArgs: [],
         failForDevDependencies: true,
         failForGitDependencies: false,
-        failLevel: levels.minor
+        failLevel: levels.minor,
+        ignore: []
     },
     checkDeps = function(config) {
         config = assign({}, defaults, config);
 
         var stream = through.obj(function(file, enc, cb) {
             var npmWorkingDirectory = path.dirname(file.path),
-                packageJson = JSON.parse(file.contents.toString());
+                packageJson = JSON.parse(file.contents.toString()),
                 outdated = spawn(config.npmPath, ['outdated', '--json', '--long'].concat(config.npmArgs), { cwd: npmWorkingDirectory }),
                 outdatedData = '';
 
@@ -50,7 +51,7 @@ var levels = {
                     minorStr = 'minor'.green.bold,
                     patchStr = 'patch'.green.bold,
                     addError = function(depName) {
-                        if (json[depName].type !== 'devDependencies' || config.failForDevDependencies === true) {
+                        if ((json[depName].type !== 'devDependencies' || config.failForDevDependencies === true) && config.ignore.indexOf(depName) === -1) {
                             ++errors;
                         }
                     };

@@ -33,13 +33,14 @@ gulp.task('check:deps', function() {
 
 ### Configuration
 
-| Option                 | Default | Description                                                                                                       |
-|------------------------|---------|-------------------------------------------------------------------------------------------------------------------|
-| npmPath                | `npm`   | Path to the `npm` binary                                                                                          |
-| npmArgs                | `[]`    | Extra arguments passed to `npm outdated` (for example `--registry`)                                               |
-| failForDevDependencies | `true`  | Fail if any dev. dependency is outdated                                                                           |
-| failForGitDependencies | `false` | Fail if there is any dependency required through `git`                                                            |
-| failLevel              | `minor` | Fail if at least a release of the given level exists (`minor` will fail if there is a new minor or patch release) |
+| Option                 | Type       | Default | Description                                                                                                       |
+|------------------------|------------|---------|-------------------------------------------------------------------------------------------------------------------|
+| npmPath                | `string`   | `npm`   | Path to the `npm` binary                                                                                          |
+| npmArgs                | `string[]` | `[]`    | Extra arguments passed to `npm outdated` (for example `--registry`)                                               |
+| failForDevDependencies | `boolean`  | `true`  | Fail if any dev. dependency is outdated                                                                           |
+| failForGitDependencies | `boolean`  | `false` | Fail if there is any dependency required through `git`                                                            |
+| failLevel              | `string`   | `minor` | Fail if at least a release of the given level exists (`minor` will fail if there is a new minor or patch release) |
+| ignore                 | `string[]` | `[]`    | Do not make the task fail for the given dependencies                                                              |
 
 Here is how you would do to use a custom NPM registry and make the task fail if it finds any git dependency:
 
