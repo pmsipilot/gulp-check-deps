@@ -45,14 +45,14 @@ var levels = {
 
                 var deps = [],
                     notices = {},
-                    errors = 0,
+                    errors = [],
                     gitStr = 'git'.green,
                     majorStr = 'major'.green.bold,
                     minorStr = 'minor'.green.bold,
                     patchStr = 'patch'.green.bold,
                     addError = function(depName) {
                         if ((json[depName].type !== 'devDependencies' || config.failForDevDependencies === true) && config.ignore.indexOf(depName) === -1) {
-                            ++errors;
+                            errors.push(depName);
                         }
                     };
 
@@ -173,7 +173,7 @@ var levels = {
                     });
                 }
 
-                cb(errors > 0 ? new util.PluginError(PLUGIN_NAME, 'Some of your dependencies are outdated!') : null);
+                cb(errors.length > 0 ? new util.PluginError(PLUGIN_NAME, 'Some of your dependencies are outdated: ' + errors.join(', ')) : null);
             });
 
             this.push(file);
