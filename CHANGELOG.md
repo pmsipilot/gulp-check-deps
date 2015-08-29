@@ -1,5 +1,5 @@
 <a name"1.2.0"></a>
-## [1.2.0](https://github.com/pmsipilot/gulp-check-deps/compare/v1.2.0...v1.2.0) (2015-08-29)
+# [1.2.0](https://github.com/pmsipilot/gulp-check-deps/compare/v1.2.0...v1.2.0) (2015-08-29)
 
 
 #### Features
