@@ -21,6 +21,7 @@ gulp.task('check:cs', function() {
 gulp.task('check:deps', function() {
     var checkDepsConfig = {
         failForGitDependencies: true,
+        failForPrerelease: false,
         ignore: 'conventional-changelog'
     };
 

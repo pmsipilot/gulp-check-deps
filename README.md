@@ -39,6 +39,7 @@ gulp.task('check:deps', function() {
 | npmArgs                | `string[]` | `[]`    | Extra arguments passed to `npm outdated` (for example `--registry`)                                               |
 | failForDevDependencies | `boolean`  | `true`  | Fail if any dev. dependency is outdated                                                                           |
 | failForGitDependencies | `boolean`  | `false` | Fail if there is any dependency required through `git`                                                            |
+| failForPrerelease      | `boolean`  | `true`  | Fail if there is any dependency available as `alpha`, `beta` or `rc`                                              |
 | failLevel              | `string`   | `minor` | Fail if at least a release of the given level exists (`minor` will fail if there is a new minor or patch release) |
 | ignore                 | `string[]` | `[]`    | Do not make the task fail for the given dependencies                                                              |
 

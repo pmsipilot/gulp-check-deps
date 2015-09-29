@@ -21,6 +21,7 @@ var levels = {
         npmArgs: [],
         failForDevDependencies: true,
         failForGitDependencies: false,
+        failForPrerelease: true,
         failLevel: levels.minor,
         ignore: []
     },
@@ -50,10 +51,17 @@ var levels = {
                     majorStr = 'major'.green.bold,
                     minorStr = 'minor'.green.bold,
                     patchStr = 'patch'.green.bold,
-                    addError = function(depName) {
-                        if ((json[depName].type !== 'devDependencies' || config.failForDevDependencies === true) && config.ignore.indexOf(depName) === -1) {
+                    addError = function(depName, latest) {
+                        if (
+                            (json[depName].type !== 'devDependencies' || config.failForDevDependencies === true) &&
+                            (isPrerelease(latest) === false || config.failForPrerelease === true) &&
+                            config.ignore.indexOf(depName) === -1
+                        ) {
                             errors.push(depName);
                         }
+                    },
+                    isPrerelease = function(version) {
+                        return /-(?:alpha|beta|rc)(?:\.\d+)?$/.test(version);
                     };
 
                 Object.keys(json).forEach(function(depName) {
@@ -110,7 +118,7 @@ var levels = {
                                 notices[dep.name].push('New ' + majorStr + ' release available: ' + dep.latest.green.bold);
 
                                 if (config.failLevel >= levels.major) {
-                                    addError(dep.name);
+                                    addError(dep.name, dep.latest);
                                 }
                             }
 
@@ -118,7 +126,7 @@ var levels = {
                                 notices[dep.name].push('New ' + minorStr + ' release available: ' + dep.latest.green.bold);
 
                                 if (config.failLevel >= levels.minor) {
-                                    addError(dep.name);
+                                    addError(dep.name, dep.latest);
                                 }
                             }
 
@@ -126,7 +134,7 @@ var levels = {
                                 notices[dep.name].push('New ' + patchStr + ' release available: ' + dep.latest.green.bold);
 
                                 if (config.failLevel >= levels.patch) {
-                                    addError(dep.name);
+                                    addError(dep.name, dep.latest);
                                 }
                             }
                         }
