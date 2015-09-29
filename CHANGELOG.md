@@ -1,3 +1,13 @@
+<a name"1.3.0"></a>
+## 1.3.0 (2015-09-29)
+
+
+#### Features
+
+* Display NPM messages in case of error ([327f0426](https://github.com/pmsipilot/gulp-check-deps/commit/327f0426))
+* Add `failForPrerelease` to configuration ([a258d313](https://github.com/pmsipilot/gulp-check-deps/commit/a258d313))
+
+
 <a name"1.2.0"></a>
 # [1.2.0](https://github.com/pmsipilot/gulp-check-deps/compare/v1.2.0...v1.2.0) (2015-08-29)
 
