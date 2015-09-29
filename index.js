@@ -42,7 +42,8 @@ var levels = {
                     return;
                 }
 
-                var error = '';
+                var error = '',
+                    chunk;
 
                 while ((chunk = outdated.stderr.read()) !== null) {
                     error += chunk;
@@ -66,7 +67,7 @@ var levels = {
                 try {
                     json = JSON.parse(outdatedData);
                 } catch (e) {
-                    json = {};;
+                    json = {};
                 }
 
                 var deps = [],

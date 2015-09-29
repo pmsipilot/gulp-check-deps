@@ -1,6 +1,5 @@
 var gulp = require('gulp'),
     path = require('path'),
-    through2 = require('through2'),
     fs = require('fs'),
     jshint = require('gulp-jshint'),
     changelog = require('conventional-changelog'),
