@@ -32,16 +32,41 @@ var levels = {
             var npmWorkingDirectory = path.dirname(file.path),
                 packageJson = JSON.parse(file.contents.toString()),
                 outdated = spawn(config.npmPath, ['outdated', '--json', '--long'].concat(config.npmArgs), { cwd: npmWorkingDirectory }),
-                outdatedData = '';
+                outdatedData = '',
+                npmErrored = false;
 
             outdated.stdout.on('data', function(chunk) { outdatedData += chunk.toString(); });
-            outdated.stdout.on('end', function() {
+
+            outdated.on('exit', function(code) {
+                if (code === 0) {
+                    return;
+                }
+
+                var error = '';
+
+                while ((chunk = outdated.stderr.read()) !== null) {
+                    error += chunk;
+                }
+
+                error.split('\n').forEach(function (row) {
+                    util.log(row);
+                });
+
+                npmErrored = true;
+                cb(new util.PluginError(PLUGIN_NAME, 'NPM exited with an error status: ' + code));
+            });
+
+            outdated.on('exit', function(code) {
+                if (code !== 0) {
+                    return;
+                }
+
                 var json;
 
                 try {
                     json = JSON.parse(outdatedData);
                 } catch (e) {
-                    json = {};
+                    json = {};;
                 }
 
                 var deps = [],
