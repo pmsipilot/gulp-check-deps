@@ -5,7 +5,7 @@ var through = require('through2'),
     semver = require('semver'),
     Table = require('cli-table'),
     assign = require('object-assign'),
-    spawn = require('child_process').spawn,
+    spawn = require('cross-spawn'),
     path = require('path');
 
 require('colors');
