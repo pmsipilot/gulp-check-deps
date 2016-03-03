@@ -21,6 +21,9 @@ It is really CI friendly !
 
 ## How to use ?
 
+
+### With Gulp
+
 ```js
 //gulpfile.js
 
@@ -29,6 +32,35 @@ var checkDeps = require('gulp-check-deps');
 gulp.task('check:deps', function() {
     return gulp.src('package.json').pipe(checkDeps());
 });
+```
+
+### In CLI
+
+Globally installed, simply run it
+
+```
+check-deps -p path/to/package.json
+```
+
+See help for configuration:
+
+```
+check-deps --help
+```
+
+When saved in a project:
+
+```
+//package.json
+{
+  //...
+  "scripts": {
+    "check-deps": "check-deps -d -l 1"
+  },
+  "devDependencies": {
+    "gulp-check-deps": "*"
+  }
+}
 ```
 
 ### Configuration
