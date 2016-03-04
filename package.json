@@ -10,6 +10,7 @@
     "url": "https://github.com/pmsipilot/gulp-check-deps"
   },
   "dependencies": {
+    "argv": "0.0.2",
     "cli-table": "^0.3.1",
     "colors": "^1.1.2",
     "cross-spawn": "^2.1.4",
@@ -23,6 +24,9 @@
     "gulp": "^3.9.0",
     "gulp-jshint": "^1.11.2",
     "jshint-stylish": "^2.0.1"
+  },
+  "bin": {
+    "check-deps": "./bin/check-deps.js"
   },
   "scripts": {
     "test": "gulp"

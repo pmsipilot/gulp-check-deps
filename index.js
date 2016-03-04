@@ -23,7 +23,8 @@ var levels = {
         failForGitDependencies: false,
         failForPrerelease: true,
         failLevel: levels.minor,
-        ignore: []
+        ignore: [],
+        isCliMode: false
     },
     checkDeps = function(config) {
         config = assign({}, defaults, config);
@@ -77,6 +78,9 @@ var levels = {
                     majorStr = 'major'.green.bold,
                     minorStr = 'minor'.green.bold,
                     patchStr = 'patch'.green.bold,
+                    isPrerelease = function(version) {
+                        return /-(?:alpha|beta|rc)(?:\.\d+)?$/.test(version);
+                    },
                     addError = function(depName, latest) {
                         if (
                             (json[depName].type !== 'devDependencies' || config.failForDevDependencies === true) &&
@@ -85,9 +89,6 @@ var levels = {
                         ) {
                             errors.push(depName);
                         }
-                    },
-                    isPrerelease = function(version) {
-                        return /-(?:alpha|beta|rc)(?:\.\d+)?$/.test(version);
                     };
 
                 Object.keys(json).forEach(function(depName) {
@@ -207,7 +208,18 @@ var levels = {
                     });
                 }
 
-                cb(errors.length > 0 ? new util.PluginError(PLUGIN_NAME, 'Some of your dependencies are outdated: ' + errors.join(', ')) : null);
+                var log = 'Some of your dependencies are outdated: ' + errors.join(', ');
+
+                if (errors.length > 0 && config.isCliMode) {
+                  console.error(log);
+                  process.exit(1);
+                }
+
+                if (errors.length > 0) {
+                  cb(new util.PluginError(PLUGIN_NAME, log));
+                }
+
+                cb(null);
             });
 
             this.push(file);
