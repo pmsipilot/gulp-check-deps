@@ -47,8 +47,15 @@ fs.readFile(packageFilePath, function(err, data) {
     failForDevDependencies: args.options.dev || false,
     failForGitDependencies: args.options.git || false,
     failForPrerelease: args.options.prerelease || false,
-    failLevel: args.options.level || checkDeps.defaults.failLevel,
-    isCliMode: true
+    failLevel: args.options.level || checkDeps.defaults.failLevel
   };
-  checkDeps(config).write({ path: packageFilePath, contents: data });
+
+  var logger = {
+    log: console.log,
+    error: function(log) {
+      console.error(log);
+      process.exit(1);
+    }
+  };
+  checkDeps(config, logger).write({ path: packageFilePath, contents: data });
 });

@@ -1,7 +1,4 @@
-var PLUGIN_NAME = 'gulp-check-deps';
-
 var through = require('through2'),
-    util = require('gulp-util'),
     semver = require('semver'),
     Table = require('cli-table'),
     assign = require('object-assign'),
@@ -23,11 +20,14 @@ var levels = {
         failForGitDependencies: false,
         failForPrerelease: true,
         failLevel: levels.minor,
-        ignore: [],
-        isCliMode: false
+        ignore: []
     },
-    checkDeps = function(config) {
+    defaultLogger = console,
+    checkDeps = function(config, logger) {
         config = assign({}, defaults, config);
+        if (!logger) {
+          logger = defaultLogger;
+        }
 
         var stream = through.obj(function(file, enc, cb) {
             var npmWorkingDirectory = path.dirname(file.path),
@@ -51,11 +51,12 @@ var levels = {
                 }
 
                 error.split('\n').forEach(function (row) {
-                    util.log(row);
+                    logger.log(row);
                 });
 
                 npmErrored = true;
-                cb(new util.PluginError(PLUGIN_NAME, 'NPM exited with an error status: ' + code));
+                var log = 'NPM exited with an error status: ' + code;
+                cb(logger.error(log));
             });
 
             outdated.on('exit', function(code) {
@@ -204,19 +205,13 @@ var levels = {
                         });
 
                     table.toString().split('\n').forEach(function (row) {
-                        util.log(row);
+                        logger.log(row);
                     });
                 }
 
-                var log = 'Some of your dependencies are outdated: ' + errors.join(', ');
-
-                if (errors.length > 0 && config.isCliMode) {
-                  console.error(log);
-                  process.exit(1);
-                }
-
                 if (errors.length > 0) {
-                  cb(new util.PluginError(PLUGIN_NAME, log));
+                  var log = 'Some of your dependencies are outdated: ' + errors.join(', ');
+                  cb(logger.error(log));
                 }
 
                 cb(null);
@@ -226,15 +221,8 @@ var levels = {
         });
 
         return stream;
-    },
-    checkDepsTask = function(gulp) {
-        gulp.task('deps:check', function() {
-            return gulp.src(path.join(process.cwd(), 'package.json'))
-                .pipe(checkDeps());
-        });
     };
 
 module.exports = checkDeps;
-module.exports.task = checkDepsTask;
 module.exports.levels = levels;
 module.exports.defaults = defaults;
