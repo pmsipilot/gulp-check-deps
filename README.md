@@ -1,8 +1,8 @@
-# gulp-check-deps [![Build Status](https://travis-ci.org/pmsipilot/gulp-check-deps.svg?branch=master)](https://travis-ci.org/pmsipilot/gulp-check-deps)
+# check-deps [![Build Status](https://travis-ci.org/pmsipilot/gulp-check-deps.svg?branch=master)](https://travis-ci.org/pmsipilot/gulp-check-deps)
 
 [Gulp](http://gulpjs.com/) plugin to check your dependencies (through npm outdated)
 
-![gulp-check-deps](demo.gif)
+![check-deps](demo.gif)
 
 ## Why ?
 
@@ -19,16 +19,33 @@ This plugin adresses those two issues:
 
 It is really CI friendly !
 
-## How to use ?
+## How to use in CLI
 
-```js
-//gulpfile.js
+Globally installed, simply run it
 
-var checkDeps = require('gulp-check-deps');
+```
+check-deps -p path/to/package.json
+```
 
-gulp.task('check:deps', function() {
-    return gulp.src('package.json').pipe(checkDeps());
-});
+See help for configuration:
+
+```
+check-deps --help
+```
+
+When saved in a project:
+
+```
+//package.json
+{
+  //...
+  "scripts": {
+    "check-deps": "check-deps -d -l 1"
+  },
+  "devDependencies": {
+    "gulp-check-deps": "*"
+  }
+}
 ```
 
 ### Configuration
@@ -48,15 +65,16 @@ Here is how you would do to use a custom NPM registry and make the task fail if 
 ```js
 //gulpfile.js
 
-var checkDeps = require('gulp-check-deps');
+var checkDeps = require('check-deps');
+var packageFilePath = 'package.json';
 
-gulp.task('check:deps', function() {
-    var checkDepsConfig = {
-        npmArgs: ['--registry', 'http://private-npm.local'],
-        failForGitDependencies: true
-    };
+fs.readFile(packageFilePath, function(err, data) {
+  var checkDepsConfig = {
+      npmArgs: ['--registry', 'http://private-npm.local'],
+      failForGitDependencies: true
+  };
 
-    return gulp.src('package.json').pipe(checkDeps(checkDepsConfig));
+  checkDeps(checkDepsConfig).write({ path: packageFilePath, contents: data });
 });
 ```
 

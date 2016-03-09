@@ -1,7 +1,4 @@
-var PLUGIN_NAME = 'gulp-check-deps';
-
 var through = require('through2'),
-    util = require('gulp-util'),
     semver = require('semver'),
     Table = require('cli-table'),
     assign = require('object-assign'),
@@ -25,8 +22,12 @@ var levels = {
         failLevel: levels.minor,
         ignore: []
     },
-    checkDeps = function(config) {
+    defaultLogger = console,
+    checkDeps = function(config, logger) {
         config = assign({}, defaults, config);
+        if (!logger) {
+          logger = defaultLogger;
+        }
 
         var stream = through.obj(function(file, enc, cb) {
             var npmWorkingDirectory = path.dirname(file.path),
@@ -50,11 +51,12 @@ var levels = {
                 }
 
                 error.split('\n').forEach(function (row) {
-                    util.log(row);
+                    logger.log(row);
                 });
 
                 npmErrored = true;
-                cb(new util.PluginError(PLUGIN_NAME, 'NPM exited with an error status: ' + code));
+                var log = 'NPM exited with an error status: ' + code;
+                cb(logger.error(log));
             });
 
             outdated.on('exit', function(code) {
@@ -77,6 +79,9 @@ var levels = {
                     majorStr = 'major'.green.bold,
                     minorStr = 'minor'.green.bold,
                     patchStr = 'patch'.green.bold,
+                    isPrerelease = function(version) {
+                        return /-(?:alpha|beta|rc)(?:\.\d+)?$/.test(version);
+                    },
                     addError = function(depName, latest) {
                         if (
                             (json[depName].type !== 'devDependencies' || config.failForDevDependencies === true) &&
@@ -85,9 +90,6 @@ var levels = {
                         ) {
                             errors.push(depName);
                         }
-                    },
-                    isPrerelease = function(version) {
-                        return /-(?:alpha|beta|rc)(?:\.\d+)?$/.test(version);
                     };
 
                 Object.keys(json).forEach(function(depName) {
@@ -203,26 +205,24 @@ var levels = {
                         });
 
                     table.toString().split('\n').forEach(function (row) {
-                        util.log(row);
+                        logger.log(row);
                     });
                 }
 
-                cb(errors.length > 0 ? new util.PluginError(PLUGIN_NAME, 'Some of your dependencies are outdated: ' + errors.join(', ')) : null);
+                if (errors.length > 0) {
+                  var log = 'Some of your dependencies are outdated: ' + errors.join(', ');
+                  cb(logger.error(log));
+                }
+
+                cb(null);
             });
 
             this.push(file);
         });
 
         return stream;
-    },
-    checkDepsTask = function(gulp) {
-        gulp.task('deps:check', function() {
-            return gulp.src(path.join(process.cwd(), 'package.json'))
-                .pipe(checkDeps());
-        });
     };
 
 module.exports = checkDeps;
-module.exports.task = checkDepsTask;
 module.exports.levels = levels;
 module.exports.defaults = defaults;
