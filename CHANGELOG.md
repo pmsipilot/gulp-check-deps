@@ -1,3 +1,12 @@
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/pmsipilot/gulp-check-deps/compare/v1.3.0...v1.4.0) (2016-03-09)
+
+
+### Features
+
+* **cli:** allow lib to be used using cli ([757d558](https://github.com/pmsipilot/gulp-check-deps/commit/757d558)), closes [#3](https://github.com/pmsipilot/gulp-check-deps/issues/3)
+
+
 <a name"1.3.0"></a>
 ## 1.3.0 (2015-09-29)
 
