@@ -1,3 +1,12 @@
+<a name="1.4.1"></a>
+## [1.4.1](https://github.com/pmsipilot/gulp-check-deps/compare/v1.3.0...v1.4.1) (2016-03-10)
+
+
+### Bug Fixes
+
+* **various:** missing dependency gulp-util ([c8b81a9](https://github.com/pmsipilot/gulp-check-deps/commit/c8b81a9))
+
+
 <a name="1.4.0"></a>
 # [1.4.0](https://github.com/pmsipilot/gulp-check-deps/compare/v1.3.0...v1.4.0) (2016-03-09)
 
