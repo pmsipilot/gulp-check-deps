@@ -10,7 +10,8 @@
     "url": "https://github.com/pmsipilot/gulp-check-deps"
   },
   "dependencies": {
-    "check-deps": "https://github.com/caliopen/gulp-check-deps#chore/split_repo"
+    "check-deps": "^1.4.0",
+    "gulp-util": "^3.0.7"
   },
   "devDependencies": {
     "conventional-changelog": "^0.0",
