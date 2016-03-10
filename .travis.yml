@@ -4,14 +4,18 @@ language: node_js
 
 node_js:
   - iojs
+  - stable
+  - 4
   - 0.12
-  - 0.11
   - 0.10
 
 matrix:
   allow_failures:
-    - node_js: 0.11
     - node_js: 0.10
 
 git:
   depth: 10
+
+script:
+  - npm test
+  - (cd gulp-check-deps && npm install && npm test)
